@@ -1,7 +1,14 @@
 CREATE OR ALTER PROCEDURE Bronze.load_bronze AS
 BEGIN
-	PRINT '============================='
-	PRINT 'Loading Bronze Layer'
+	PRINT '=============================';
+	PRINT 'Loading Bronze Layer';
+	PRINT '=============================';
+
+	PRINT '-----------------------------';
+	PRINT 'Loading CRM Tables';
+	PRINT '-----------------------------';
+
+	PRINT '>> Truncating Table: Bronze.crm_cust_info'
 	TRUNCATE TABLE Bronze.crm_cust_info; 
 	BULK INSERT	Bronze.crm_cust_info 
 	FROM 'C:\Users\spega\Downloads\sql-data-warehouse-project\sql-data-warehouse-project\datasets\source_crm\cust_info.csv'
@@ -11,6 +18,7 @@ BEGIN
 		TABLOCK
 	);
 
+	PRINT '>> Truncating Table: Bronze.crm_prd_info'
 	TRUNCATE TABLE Bronze.crm_prd_info; 
 	BULK INSERT	Bronze.crm_prd_info
 	FROM 'C:\Users\spega\Downloads\sql-data-warehouse-project\sql-data-warehouse-project\datasets\source_crm\prd_info.csv'
@@ -20,7 +28,7 @@ BEGIN
 		TABLOCK
 	);
 
-	SELECT * FROM Bronze.crm_sales_details
+	PRINT '>> Truncating Table: Bronze.crm_sales_details'
 
 	TRUNCATE TABLE Bronze.crm_sales_details; 
 	BULK INSERT	Bronze.crm_sales_details
@@ -31,6 +39,12 @@ BEGIN
 		TABLOCK
 	);
 
+	PRINT '-----------------------------';
+	PRINT 'Loading ERP Tables';
+	PRINT '-----------------------------';
+
+	PRINT '>> Truncating Table: Bronze.erp_CUST_AZ12'
+
 	TRUNCATE TABLE Bronze.erp_CUST_AZ12; 
 	BULK INSERT	Bronze.erp_CUST_AZ12
 	FROM 'C:\Users\spega\Downloads\sql-data-warehouse-project\sql-data-warehouse-project\datasets\source_erp\CUST_AZ12.csv'
@@ -40,6 +54,8 @@ BEGIN
 		TABLOCK
 	);
 
+	PRINT '>> Truncating Table: Bronze.erp_LOC_A101'
+
 	TRUNCATE TABLE Bronze.erp_LOC_A101; 
 	BULK INSERT	Bronze.erp_LOC_A101
 	FROM 'C:\Users\spega\Downloads\sql-data-warehouse-project\sql-data-warehouse-project\datasets\source_erp\LOC_A101.csv'
@@ -48,6 +64,8 @@ BEGIN
 		FIELDTERMINATOR = ',',
 		TABLOCK
 	);
+	
+	PRINT '>> Truncating Table: Bronze.erp_PX_CAT_G1V'
 
 	TRUNCATE TABLE Bronze.erp_PX_CAT_G1V2; 
 	BULK INSERT	Bronze.erp_PX_CAT_G1V2
