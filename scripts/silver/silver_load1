@@ -1,3 +1,7 @@
+PRINT '>> Truncating data into silver.crm_cust_info';
+TRUNCATE TABLE Silver.crm_cust_info;
+PRINT '>> Inserting data into silver.crm_cust_info';
+
 INSERT INTO Silver.crm_cust_info (
 	cst_id,
 	cst_key,
@@ -27,7 +31,6 @@ FROM (
 	FROM Bronze.crm_cust_info
 	WHERE cst_id IS NOT NULL
 	)t WHERE flag_last=1
-
 
 --Check for unwanted spaces
 SELECT
