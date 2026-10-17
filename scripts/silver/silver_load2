@@ -1,29 +1,6 @@
---Check for unwanted spaces
-SELECT
-*
-FROM bronze.crm_cust_info
-WHERE cst_firstname != TRIM(cst_firstname)
-
---Data Standardization and Consistency
-SELECT DISTINCT prd_line
-FROM Bronze.crm_prd_info
-
---Check for Nulls
-SELECT prd_id,
-COUNT(*)
-FROM bronze.crm_prd_info
-GROUP BY prd_ID
-HAVING COUNT(*) < 0 OR prd_ID IS NULL
-
---Check for Nulls and negatives
-SELECT prd_cost
-FROM bronze.crm_prd_info
-WHERE prd_cost < 0 OR prd_cost IS NULL
-
---Check for Invalid Dates
-SELECT *
-FROM bronze.crm_prd_info
-WHERE prd_end_dt < prd_start_dt
+PRINT '>> Truncating data into Silver.crm_prd_info';
+TRUNCATE TABLE Silver.crm_prd_info;
+PRINT '>> Inserting data into Silver.crm_prd_info';
 
 IF OBJECT_ID ('Silver.crm_prd_info', 'U') IS NOT NULL
 	DROP TABLE silver.crm_prd_info
@@ -55,3 +32,30 @@ END prd_line,
 CAST (prd_start_dt AS DATE) AS prd_start_dt,
 CAST(LEAD(prd_start_dt) OVER (PARTITION BY prd_key ORDER BY prd_start_dt)-1 AS DATE) AS prd_end_dt
 FROM bronze.crm_prd_info
+
+--Check for unwanted spaces
+SELECT
+*
+FROM bronze.crm_cust_info
+WHERE cst_firstname != TRIM(cst_firstname)
+
+--Data Standardization and Consistency
+SELECT DISTINCT prd_line
+FROM Bronze.crm_prd_info
+
+--Check for Nulls
+SELECT prd_id,
+COUNT(*)
+FROM bronze.crm_prd_info
+GROUP BY prd_ID
+HAVING COUNT(*) < 0 OR prd_ID IS NULL
+
+--Check for Nulls and negatives
+SELECT prd_cost
+FROM bronze.crm_prd_info
+WHERE prd_cost < 0 OR prd_cost IS NULL
+
+--Check for Invalid Dates
+SELECT *
+FROM bronze.crm_prd_info
+WHERE prd_end_dt < prd_start_dt
