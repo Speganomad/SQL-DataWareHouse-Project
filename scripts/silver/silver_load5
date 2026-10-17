@@ -1,0 +1,19 @@
+PRINT '>> Truncating data into silver.erp_LOC_A101';
+TRUNCATE TABLE silver.erp_LOC_A101;
+PRINT '>> Inserting data into silver.erp_LOC_A101';
+
+INSERT INTO silver.erp_LOC_A101 
+(cid,cntry)
+
+SELECT 
+REPLACE(CID, '-', '') cid, --REMOVE SEPARATOR 
+CASE WHEN TRIM(cntry) = 'DE' THEN 'Germany'
+	 WHEN TRIM(cntry) IN ('US','USA') THEN 'United States'
+	 WHEN TRIM(cntry) = '' or CNTRY IS NULL THEN 'n/a'
+	 ELSE TRIM(cntry)
+END AS cntry --REMOVE ABBREVATIONS AND NULLS
+FROM bronze.erp_LOC_A101;
+
+-- Data Consistency
+SELECT DISTINCT cntry
+FROM silver.erp_LOC_A101
