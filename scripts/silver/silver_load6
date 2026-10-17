@@ -1,0 +1,25 @@
+PRINT '>> Truncating data into Silver.erp_PX_CAT_G1V2';
+TRUNCATE TABLE Silver.erp_PX_CAT_G1V2;
+PRINT '>> Inserting data into Silver.erp_PX_CAT_G1V2';
+
+INSERT INTO Silver.erp_PX_CAT_G1V2
+(id, cat, subcat, MAINTENANCE)
+
+SELECT
+id,
+cat,
+SUBCAT,
+MAINTENANCE
+FROM Bronze.erp_PX_CAT_G1V2
+
+--CHECK FOR UNWANTED SPACES
+SELECT
+*
+FROM Bronze.erp_PX_CAT_G1V2
+WHERE cat != TRIM(CAT) 
+or subcat != TRIM(SUBCAT)
+or MAINTENANCE != TRIM(MAINTENANCE)
+
+-- Data Consistency
+SELECT DISTINCT SUBCAT
+FROM Bronze.erp_PX_CAT_G1V2
