@@ -1,0 +1,33 @@
+--Check for Nulls or duplicates
+SELECT 
+	cst_id,
+	COUNT(*)
+FROM silver.crm_cust_info
+GROUP BY cst_id
+HAVING COUNT(*) >1 OR cst_id IS NULL;
+
+--Check for unwanted spaces
+SELECT
+*
+FROM silver.crm_cust_info
+WHERE cst_firstname != TRIM(cst_firstname)
+
+--Data Standardization and Consistency
+SELECT DISTINCT cst_gndr
+FROM silver.crm_cust_info
+
+--Check for Negatives
+SELECT prd_cost
+FROM silver.crm_prd_info
+WHERE prd_cost < 0 OR prd_cost IS NULL
+
+--Check for Invalid Dates
+SELECT *
+FROM silver.crm_prd_info
+WHERE prd_end_dt < prd_start_dt
+
+--Check for impossible dates in erp
+SELECT DISTINCT 
+bdate
+FROM silver.erp_CUST_AZ12
+WHERE BDATE < '1924-01-01' OR bdate > GETDATE()
