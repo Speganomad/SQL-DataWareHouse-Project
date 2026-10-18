@@ -1,0 +1,2 @@
+--Data Standardization
+SELECT DISTINCT Gender FROM Gold.dim_customers
