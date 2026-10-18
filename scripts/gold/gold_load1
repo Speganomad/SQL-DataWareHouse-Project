@@ -1,0 +1,20 @@
+CREATE VIEW gold.dim_customers AS
+SELECT 
+	ROW_NUMBER() OVER (ORDER BY cst_id) AS customer_Key,
+	ci.cst_id AS Customer_ID,
+	ci.cst_key AS Customer_Number,
+	ci.cst_firstname AS First_Name,
+	ci.cst_lastname AS Last_Name,
+	la.CNTRY AS Country,
+	ci.cst_material_status AS Marital_Status,
+	CASE WHEN ci.cst_gndr!= 'n/a' THEN ci.cst_gndr --CRM is preferred source for gender info
+		 ELSE COALESCE(ca.gen, 'n/a')
+	END AS Gender,
+	ca.BDATE AS Birth_Date,
+	ci.cst_create_date AS Creation_Date
+FROM silver.crm_cust_info ci
+LEFT JOIN silver.erp_CUST_AZ12 ca
+ON		  ci.cst_key=ca.CID
+LEFT JOIN silver.erp_LOC_A101 la
+ON		  ci.cst_key=la.CID
+
