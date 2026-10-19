@@ -20,3 +20,6 @@ ON pn.cat_id = pc.id
 WHERE pn.prd_end_dt IS NULL --Filter out old historical data
 )t GROUP BY prd_key
 HAVING COUNT(*) > 1
+
+--Check Foreign Key Integrity
+SELECT * FROM gold.fact_sales
