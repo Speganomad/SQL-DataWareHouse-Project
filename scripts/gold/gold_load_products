@@ -1,0 +1,17 @@
+CREATE VIEW gold.dim_products AS
+SELECT
+ROW_NUMBER() OVER (ORDER BY pn.prd_start_dt, pn.prd_key) AS Product_Key,
+pn.prd_id AS Product_ID,
+pn.prd_key AS Product_Number,
+pn.prd_nm AS Product_Name,
+pn.cat_id AS Category_ID,
+pc.CAT  AS Category,
+pc.SUBCAT AS Subcategory,
+pc.MAINTENANCE As Maintenance,
+pn.prd_cost AS Cost,
+pn.prd_line AS Product_Line,
+pn.prd_start_dt AS Start_Date
+FROM Silver.crm_prd_info pn
+LEFT JOIN silver.erp_PX_CAT_G1V2 pc
+ON pn.cat_id = pc.id
+WHERE pn.prd_end_dt IS NULL --Filter out old historical data
