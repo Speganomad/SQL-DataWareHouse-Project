@@ -22,4 +22,9 @@ WHERE pn.prd_end_dt IS NULL --Filter out old historical data
 HAVING COUNT(*) > 1
 
 --Check Foreign Key Integrity
-SELECT * FROM gold.fact_sales
+SELECT * FROM gold.fact_sales f
+LEFT JOIN gold.dim_customers c
+ON c.customer_Key = f.Customer_Key
+LEFT JOIN gold.dim_products p
+ON p.Product_Key =f.Product_Key
+WHERE c.customer_Key IS NULL OR p.Product_Key IS NULL
